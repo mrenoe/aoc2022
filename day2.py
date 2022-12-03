@@ -1,4 +1,3 @@
-from collections import defaultdict
 
 def get_input():
   
@@ -23,7 +22,7 @@ def part1():
   won = 6
   draw = 3
   lost = 0
-  
+
   rock_score = 1
   paper_score = 2
   scissor_score = 3
