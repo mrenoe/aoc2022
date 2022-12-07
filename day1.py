@@ -2,7 +2,7 @@ from collections import defaultdict
 
 def get_input():
   input = defaultdict(list)
-  with open("day1.txt", "r") as tf:
+  with open("txtfiles/day1.txt", "r") as tf:
     line = tf.readline()
     i = 0
     while line:

@@ -1,6 +1,6 @@
 def get_input():
   
-  with open("day4.txt", "r") as tf:
+  with open("txtfiles/day4.txt", "r") as tf:
     lines = tf.read().split("\n")
   return lines
 
