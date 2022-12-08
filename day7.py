@@ -1,31 +1,30 @@
 from collections import defaultdict
 def get_input():
   
-  with open("txtfiles/day7a.txt", "r") as tf:
+  with open("txtfiles/day7.txt", "r") as tf:
     lines = tf.read().split("\n")
   return lines
 
 
 def dfs(visited, directory, directories, directory_sizes):
-  print(f"visited: {visited}")
-  if directory in visited:
-    print(f"{directory} in {visited} returning: {sum(directory_sizes[directory])}")
-    return sum(directory_sizes[directory])
+  
   visited.add(directory)
   running_total = sum(directory_sizes[directory])
-  for i in range(1, len(directories[directory])):
-    print(f"Traversing {directories[directory][i]}")
+  
+  for i in range(0, len(directories[directory])):
+    
+    if directories[directory][i] not in visited:
 
-    running_total += dfs(visited, directories[directory][i], directories, directory_sizes)
+      running_total += dfs(visited, directories[directory][i], directories, directory_sizes)
 
-  print(f"finished, returning {running_total}")
+
   return running_total
 
 def part1():
   shell_out = get_input()
   directories = defaultdict(list)
   directory_sizes = defaultdict(list)
-  directories['/'] #starting point
+  directories['/-/'] = ['-1'] #starting point
   cwd =  '/'
   ls_running = False
   for line in shell_out:
@@ -35,9 +34,11 @@ def part1():
       command = line.split()
       
       if command[1] == 'cd' and command[2] == '..':
+        print(f"cwd was: {cwd}, will become: {directories[cwd][0]}")
         cwd = directories[cwd][0]
+        
       elif command[1] == 'cd':
-        cwd = command[2]
+        cwd = cwd + '-' + command[2]
       elif command[1] == 'ls':
         ls_running = True
         continue
@@ -45,30 +46,34 @@ def part1():
     if ls_running:
       args = line.split()
       if args[0] == 'dir':
-        directories[cwd].append(args[1])
-        directories[args[1]].append(cwd) #cwd has to be the 0th element
+        if cwd == '/':
+          directories[cwd].append(args[1])
+          directories[args[1]].append(cwd) #cwd has to be the 0th element
+        else:
+          directories[cwd].append(f"{cwd}-{args[1]}")
+          directories[f"{cwd}-{args[1]}"].append(cwd) #cwd has to be the 0th element
       else:
         size, _ = line.split()
         directory_sizes[cwd].append(int(size))
-  print(directories)
-  print(directory_sizes)
+  #print(directories)
+  #print(directory_sizes)
   total_sizes = {}
-  for directory in directories:
-    print(f"directory: {directory}")
-    start = 0
-    if directory != '/':
-      start = 1
+  for directory in directories: #Go over each directory
+    print(f"\ndirectory: {directory}")
     visited = set()
-    tot = sum(directory_sizes[directory])
-    for i in range(start, len(directories[directory])):
-      tot += dfs(visited, directories[directory][i], directories, directory_sizes)
+    if directory != '/':
+      visited.add(directories[directory][0])
+    
+    tot = 0
+    tot += dfs(visited, directory, directories, directory_sizes)
     
     total_sizes[directory] = tot
   
   print(total_sizes)
   total = 0
   for dir in total_sizes:
-    if total_sizes[dir] <= 100000:
+    if total_sizes[dir] <= 100_000:
+      
       total += total_sizes[dir]
   print(total)
     
