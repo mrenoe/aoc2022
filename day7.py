@@ -34,7 +34,7 @@ def part1():
       command = line.split()
       
       if command[1] == 'cd' and command[2] == '..':
-        print(f"cwd was: {cwd}, will become: {directories[cwd][0]}")
+        #print(f"cwd was: {cwd}, will become: {directories[cwd][0]}")
         cwd = directories[cwd][0]
         
       elif command[1] == 'cd':
@@ -59,7 +59,7 @@ def part1():
   #print(directory_sizes)
   total_sizes = {}
   for directory in directories: #Go over each directory
-    print(f"\ndirectory: {directory}")
+    #print(f"\ndirectory: {directory}")
     visited = set()
     if directory != '/':
       visited.add(directories[directory][0])
@@ -69,19 +69,35 @@ def part1():
     
     total_sizes[directory] = tot
   
-  print(total_sizes)
+  #print(total_sizes)
   total = 0
   for dir in total_sizes:
     if total_sizes[dir] <= 100_000:
       
       total += total_sizes[dir]
-  print(total)
+  #print(total)
+  return total_sizes
     
 
 def part2():
-  '''
-  '''
+  total_memory = 70000000
+  goal = 30000000
+  directories_and_sizes = part1()
+  free_memory = total_memory - directories_and_sizes['/-/']
+  
+
+  delete_size = goal - free_memory
+
+  smallest_dir = ''
+  smallest_val = total_memory
+  for directory in directories_and_sizes:
+    if directories_and_sizes[directory] >= delete_size:
+      
+      if directories_and_sizes[directory] < smallest_val:
+        smallest_val = directories_and_sizes[directory]
+        smallest_dir = directory
+  print(f"{smallest_dir} - {smallest_val}")
 
 if __name__ == '__main__':
-  part1()
-  #part2()
+  #part1()
+  part2()
