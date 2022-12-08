@@ -1,4 +1,4 @@
-from collections import defaultdict
+
 def get_input():
   
   with open("txtfiles/day8.txt", "r") as tf:
@@ -116,12 +116,11 @@ def part2():
         right = viewingDistanceRight(i, j, input)
         up = viewingDistanceUp(i, j, input)
         down = viewingDistanceDown(i, j, input)
-        print(f"\nAt point {i},{j}, value: {input[i][j]}")
-        print(f"Scores - Left: {left}, Right: {right}, Up: {up}, Down:{down}")
+
         distances.append(left * right * up * down)
       
        
-  print(distances)     
+      
   print(f"max: {max(distances)}")
 
 
